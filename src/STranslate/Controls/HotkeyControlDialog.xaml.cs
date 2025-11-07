@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using iNKORE.UI.WPF.Modern.Controls;
 using STranslate.Core;
 using STranslate.Helpers;
-using STranslate.Plugin;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
@@ -20,7 +19,7 @@ public partial class HotkeyControlDialog : ContentDialog
     }
 
     private readonly HotkeyType _type;
-    private readonly IInternationalization _i18n;
+    private readonly Internationalization _i18n;
     private readonly HotkeySettings _hotkeySettings;
     private readonly HotkeyModel _cacheHotkey;
     private Action? _overwriteOtherHotkey;
@@ -35,7 +34,7 @@ public partial class HotkeyControlDialog : ContentDialog
     public HotkeyControlDialog(HotkeyType type, string hotkey, string defaultHotkey, string windowTitle = "")
     {
         _type = type;
-        _i18n = Ioc.Default.GetRequiredService<IInternationalization>();
+        _i18n = Ioc.Default.GetRequiredService<Internationalization>();
         _hotkeySettings = Ioc.Default.GetRequiredService<HotkeySettings>();
         WindowTitle = windowTitle switch
         {

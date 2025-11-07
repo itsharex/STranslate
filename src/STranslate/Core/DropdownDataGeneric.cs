@@ -1,12 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
-using STranslate.Plugin;
 
 namespace STranslate.Core;
 
 public partial class DropdownDataGeneric<TValue> : ObservableObject where TValue : Enum
 {
-    private static readonly IInternationalization _i18n = Ioc.Default.GetRequiredService<IInternationalization>();
+    private static readonly Internationalization _i18n = Ioc.Default.GetRequiredService<Internationalization>();
 
     [ObservableProperty]
     public partial string Display { get; set; } = string.Empty;

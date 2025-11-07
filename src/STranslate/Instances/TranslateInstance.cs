@@ -1,5 +1,4 @@
 using CommunityToolkit.Mvvm.ComponentModel;
-using iNKORE.UI.WPF.Modern.Controls;
 using STranslate.Core;
 using STranslate.Plugin;
 using System.Windows;
@@ -20,7 +19,7 @@ public partial class TranslateInstance : ServiceInstanceBase
         ServiceManager serviceManager,
         PluginInstance pluginInstance,
         ServiceSettings serviceSettings,
-        IInternationalization i18n
+        Internationalization i18n
     ) : base(pluginManager, serviceManager, pluginInstance, serviceSettings, i18n)
     {
         _serviceSettings = serviceSettings;

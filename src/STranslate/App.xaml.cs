@@ -94,7 +94,7 @@ public partial class App : ISingleInstanceApp, INavigation, IDisposable
                     services.AddSingleton<OcrInstance>();
                     services.AddSingleton<TtsInstance>();
                     services.AddSingleton<VocabularyInstance>();
-                    services.AddSingleton<IInternationalization, Internationalization>();
+                    services.AddSingleton<Internationalization>();
 
                     // 注册HTTP客户端
                     services.AddHttpClient(Constant.HttpClientName, client =>
@@ -210,7 +210,7 @@ public partial class App : ISingleInstanceApp, INavigation, IDisposable
     {
         if (!UACHelper.IsUserAdministrator()) return;
         _mainWindowViewModel?.TrayToolTip = $"{Constant.AppName} # " +
-            $"{Ioc.Default.GetRequiredService<IInternationalization>().GetTranslation("Administrator")}";
+            $"{Ioc.Default.GetRequiredService<Internationalization>().GetTranslation("Administrator")}";
     }
 
     #endregion

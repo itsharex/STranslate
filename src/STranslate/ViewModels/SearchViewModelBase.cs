@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using iNKORE.UI.WPF.Modern.Controls;
 using STranslate.Core;
-using STranslate.Plugin;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -12,7 +11,7 @@ public partial class SearchViewModelBase : ObservableObject
 {
     protected List<string> SettingItems { get; set; } = [];
 
-    public SearchViewModelBase(IInternationalization i18n, string prefix)
+    public SearchViewModelBase(Internationalization i18n, string prefix)
     {
         i18n.OnLanguageChanged += () => UpdateItems(prefix);
 

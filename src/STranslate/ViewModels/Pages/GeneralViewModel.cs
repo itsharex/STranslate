@@ -9,7 +9,7 @@ public class GeneralViewModel : SearchViewModelBase
     public GeneralViewModel(
         Settings settings,
         DataProvider dataProvider,
-        IInternationalization i18n) : base(i18n, "General_")
+        Internationalization i18n) : base(i18n, "General_")
     {
         Settings = settings;
         DataProvider = dataProvider;

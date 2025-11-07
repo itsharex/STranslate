@@ -1,7 +1,6 @@
 using CommunityToolkit.Mvvm.DependencyInjection;
 using STranslate.Core;
 using STranslate.Helpers;
-using STranslate.Plugin;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +10,7 @@ namespace STranslate.Controls;
 
 public class HotkeyControl : Button
 {
-    private readonly IInternationalization _i18n;
+    private readonly Internationalization _i18n;
 
     static HotkeyControl()
     {
@@ -21,7 +20,7 @@ public class HotkeyControl : Button
 
     public HotkeyControl()
     {
-        _i18n = Ioc.Default.GetRequiredService<IInternationalization>();
+        _i18n = Ioc.Default.GetRequiredService<Internationalization>();
     }
 
     public string WindowTitle

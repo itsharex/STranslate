@@ -17,7 +17,7 @@ public abstract partial class ServiceInstanceBase : ObservableObject, IDisposabl
     private readonly ServiceManager _serviceManager;
     private readonly PluginInstance _pluginInstance;
     private readonly ServiceSettings _serviceSettings;
-    private readonly IInternationalization _i18n;
+    private readonly Internationalization _i18n;
     private readonly List<ServiceData> _svcSettingDatas;
     private bool _isInternalTrigger;
 
@@ -31,7 +31,7 @@ public abstract partial class ServiceInstanceBase : ObservableObject, IDisposabl
         ServiceManager serviceManager,
         PluginInstance pluginInstance,
         ServiceSettings serviceSettings,
-        IInternationalization i18n
+        Internationalization i18n
         )
     {
         _pluginManager = pluginManager;

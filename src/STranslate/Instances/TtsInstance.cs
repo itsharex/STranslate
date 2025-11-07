@@ -12,7 +12,7 @@ public partial class TtsInstance : ServiceInstanceBase
         ServiceManager serviceManager,
         PluginInstance pluginInstance,
         ServiceSettings serviceSettings,
-        IInternationalization i18n
+        Internationalization i18n
     ) : base(pluginManager, serviceManager, pluginInstance, serviceSettings, i18n)
     {
         LoadPlugins<ITtsPlugin>();

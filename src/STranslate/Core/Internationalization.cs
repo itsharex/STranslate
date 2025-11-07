@@ -7,7 +7,7 @@ using System.Windows;
 
 namespace STranslate.Core;
 
-public class Internationalization(ILogger<Internationalization> logger, PluginManager pluginManager) : IInternationalization
+public class Internationalization(ILogger<Internationalization> logger, PluginManager pluginManager)
 {
     private const string Folder = "Languages";
     private const string DefaultLanguageCode = "en";

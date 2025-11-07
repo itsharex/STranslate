@@ -23,7 +23,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     #region Constructor & Core Members
 
     private readonly ILogger<MainWindowViewModel> _logger;
-    private readonly IInternationalization _i18n;
+    private readonly Internationalization _i18n;
     private readonly IAudioPlayer _audioPlayer;
     private readonly IScreenshot _screenshot;
     private readonly ISnackbar _snakebar;
@@ -41,7 +41,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     public MainWindowViewModel(
         DataProvider dataProvider,
         ILogger<MainWindowViewModel> logger,
-        IInternationalization i18n,
+        Internationalization i18n,
         IAudioPlayer audioPlayer,
         IScreenshot screenshot,
         ISnackbar snackbar,

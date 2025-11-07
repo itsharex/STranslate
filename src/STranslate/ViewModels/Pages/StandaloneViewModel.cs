@@ -1,13 +1,12 @@
 using CommunityToolkit.Mvvm.Input;
 using STranslate.Core;
-using STranslate.Plugin;
 using System.Windows.Controls;
 
 namespace STranslate.ViewModels.Pages;
 
 public partial class StandaloneViewModel : SearchViewModelBase
 {
-    public StandaloneViewModel(Settings settings, DataProvider dataProvider, IInternationalization i18n) : base(i18n, "Standalone_")
+    public StandaloneViewModel(Settings settings, DataProvider dataProvider, Internationalization i18n) : base(i18n, "Standalone_")
     {
         Settings = settings;
         DataProvider = dataProvider;

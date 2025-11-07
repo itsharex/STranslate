@@ -13,7 +13,7 @@ public class LanguageDetector
 {
     private static readonly ILogger<Utilities> _logger = Ioc.Default.GetRequiredService<ILogger<Utilities>>();
     private static readonly IHttpService _httpService = Ioc.Default.GetRequiredService<IHttpService>();
-    private static readonly IInternationalization _i18n = Ioc.Default.GetRequiredService<IInternationalization>();
+    private static readonly Internationalization _i18n = Ioc.Default.GetRequiredService<Internationalization>();
     private static readonly Settings _settings = Ioc.Default.GetRequiredService<Settings>();
 
     public static async Task<(LangEnum source, LangEnum target)> GetLanguageAsync(

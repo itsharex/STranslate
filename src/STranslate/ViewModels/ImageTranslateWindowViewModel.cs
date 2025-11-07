@@ -34,7 +34,7 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
         OcrInstance ocrInstance,
         TranslateInstance translateInstance,
         TtsInstance ttsInstance,
-        IInternationalization i18n,
+        Internationalization i18n,
         ISnackbar snackbar)
     {
         Settings = settings;
@@ -77,7 +77,7 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
     private readonly OcrInstance _ocrInstance;
     private readonly TranslateInstance _translateInstance;
     private readonly TtsInstance _ttsInstance;
-    private readonly IInternationalization _i18n;
+    private readonly Internationalization _i18n;
     private readonly ISnackbar _snackbar;
 
     private const double WidthMultiplier = 2;

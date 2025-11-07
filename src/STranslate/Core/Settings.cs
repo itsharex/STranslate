@@ -321,7 +321,7 @@ public partial class Settings : ObservableObject
 
     private void ApplyLanguage(bool initialize = false)
     {
-        var i18n = Ioc.Default.GetRequiredService<IInternationalization>();
+        var i18n = Ioc.Default.GetRequiredService<Internationalization>();
         if (initialize)
             i18n.InitializeLanguage(Language);
         else

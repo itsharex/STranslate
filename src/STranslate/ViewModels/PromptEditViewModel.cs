@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
+using STranslate.Core;
 using STranslate.Plugin;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -11,7 +12,7 @@ namespace STranslate.ViewModels;
 
 public partial class PromptEditViewModel : ObservableObject, IDisposable
 {
-    private readonly IInternationalization _i18n = Ioc.Default.GetRequiredService<IInternationalization>();
+    private readonly Internationalization _i18n = Ioc.Default.GetRequiredService<Internationalization>();
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RemovePromptCommand), nameof(EditPromptCommand), nameof(CopyPromptCommand))]

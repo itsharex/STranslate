@@ -9,7 +9,7 @@ namespace STranslate.Core;
 /// </summary>
 public class DataProvider
 {
-    public DataProvider(IInternationalization i18n)
+    public DataProvider(Internationalization i18n)
     {
         i18n.OnLanguageChanged += UpdateLanguage;
         UpdateLanguage();

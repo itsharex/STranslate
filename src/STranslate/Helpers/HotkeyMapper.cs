@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NHotkey.Wpf;
 using STranslate.Core;
-using STranslate.Plugin;
 using System.Windows;
 using Windows.Win32;
 using Windows.Win32.UI.Input.KeyboardAndMouse;
@@ -13,14 +12,14 @@ namespace STranslate.Helpers;
 public class HotkeyMapper
 {
     private static readonly ILogger<HotkeyMapper> _logger;
-    private static readonly IInternationalization _i18n;
+    private static readonly Internationalization _i18n;
     private const string LWin = "LWin";
     private const string RWin = "RWin";
 
     static HotkeyMapper()
     {
         _logger = Ioc.Default.GetRequiredService<ILogger<HotkeyMapper>>();
-        _i18n = Ioc.Default.GetRequiredService<IInternationalization>();
+        _i18n = Ioc.Default.GetRequiredService<Internationalization>();
     }
 
     internal static bool SetHotkey(string hotkeyStr, Action action)

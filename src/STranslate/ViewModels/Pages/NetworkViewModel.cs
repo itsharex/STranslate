@@ -24,7 +24,7 @@ public partial class NetworkViewModel : SearchViewModelBase
         Settings settings,
         DataProvider dataProvider,
         IHttpService httpService,
-        IInternationalization i18n,
+        Internationalization i18n,
         ILogger<NetworkViewModel> logger) : base(i18n, "Network_")
     {
         Settings = settings;

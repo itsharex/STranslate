@@ -63,7 +63,7 @@ public class PluginManager
                 return ($"Failed to load plugin: {result.ErrorMessage}", null);
 
             _pluginMetaDatas.Add(result.PluginMetaData);
-            Ioc.Default.GetRequiredService<IInternationalization>().LoadInstalledPluginLanguages(pluginPath);
+            Ioc.Default.GetRequiredService<Internationalization>().LoadInstalledPluginLanguages(pluginPath);
 
             return ("", result.PluginMetaData);
         }

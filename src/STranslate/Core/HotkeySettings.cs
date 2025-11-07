@@ -2,7 +2,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using NHotkey.Wpf;
 using STranslate.Helpers;
-using STranslate.Plugin;
 using STranslate.Resources;
 using STranslate.ViewModels;
 using System.Text.Json.Serialization;
@@ -91,7 +90,7 @@ public partial class HotkeySettings : ObservableObject
                     onRemoved();
                 else
                     iNKORE.UI.WPF.Modern.Controls.
-                    MessageBox.Show(Ioc.Default.GetRequiredService<IInternationalization>().GetTranslation("HotkeyOverwriteFailed"),
+                    MessageBox.Show(Ioc.Default.GetRequiredService<Internationalization>().GetTranslation("HotkeyOverwriteFailed"),
                     Constant.AppName,
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning,

@@ -16,7 +16,7 @@ public class PluginContext(PluginMetaData metaData, string serviceId) : IPluginC
 
     public ILogger Logger => Ioc.Default.GetRequiredService<ILoggerFactory>().CreateLogger(metaData.AssemblyName);
 
-    public string GetTranslation(string key) => Ioc.Default.GetRequiredService<IInternationalization>().GetTranslation(key);
+    public string GetTranslation(string key) => Ioc.Default.GetRequiredService<Internationalization>().GetTranslation(key);
 
     public IHttpService HttpService => Ioc.Default.GetRequiredService<IHttpService>();
 

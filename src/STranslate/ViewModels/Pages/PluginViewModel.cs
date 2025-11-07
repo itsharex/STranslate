@@ -15,7 +15,7 @@ namespace STranslate.ViewModels.Pages;
 public partial class PluginViewModel : ObservableObject
 {
     private readonly PluginInstance _pluginInstance;
-    private readonly IInternationalization _i18n;
+    private readonly Internationalization _i18n;
 
     public DataProvider DataProvider { get; }
 
@@ -27,7 +27,7 @@ public partial class PluginViewModel : ObservableObject
 
     public PluginViewModel(
         PluginInstance pluginInstance,
-        IInternationalization i18n,
+        Internationalization i18n,
         DataProvider dataProvider,
         ISnackbar snackbar
         )
