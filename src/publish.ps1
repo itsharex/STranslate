@@ -16,4 +16,8 @@ dotnet build .\STranslate.sln --configuration Release --no-incremental
 Write-Host "正在还原FodyWeavers.xml..." -ForegroundColor Yellow
 git restore STranslate/FodyWeavers.xml
 
+# 删除插件目录内的多余文件
+Write-Host "正在清理多余STranslate.Plugin.dll/.xml..." -ForegroundColor Yellow
+Get-ChildItem -Path ".artifacts/Release/Plugins" -Recurse -Include "STranslate.Plugin.dll","STranslate.Plugin.xml" | Remove-Item -Force
+
 Write-Host "构建完成！" -ForegroundColor Green
