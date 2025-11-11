@@ -508,6 +508,7 @@
                                 BorderThickness="0"
                                 FontSize="{Binding RelativeSource={RelativeSource AncestorType=control:OutputControl}, Path=FontSize}"
                                 IsReadOnly="True"
+                                SnapsToDevicePixels="True"
                                 Text="{Binding Plugin.TransResult.Text}"
                                 TextWrapping="Wrap">
                                 <TextBox.Style>

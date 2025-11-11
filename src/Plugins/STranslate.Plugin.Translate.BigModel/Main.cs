@@ -266,11 +266,7 @@ public class Main : LlmTranslatePluginBase
 
                 #endregion
 #endif
-                // 在后台线程设置文本
-                _ = System.Windows.Application.Current.Dispatcher.InvokeAsync(new Action(() =>
-                {
-                    result.Text += contentValue;
-                }), System.Windows.Threading.DispatcherPriority.Background);
+                result.Text += contentValue;
             }
             catch
             {

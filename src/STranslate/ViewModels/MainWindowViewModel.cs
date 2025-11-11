@@ -494,7 +494,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             if (result.IsSuccess && !string.IsNullOrEmpty(result.Text))
                 InputHelper.PrintText(result.Text);
             else
-                throw new Exception("翻译失败");
+                throw new Exception($"IsSuccess: {result.IsSuccess}, Text: {result.Text}");
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
         {
