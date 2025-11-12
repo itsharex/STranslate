@@ -21,7 +21,6 @@
     ui:TitleBar.ExtendViewIntoTitleBar="True"
     ui:WindowHelper.SystemBackdropType="Mica"
     ui:WindowHelper.UseModernWindowStyle="True"
-    FontFamily="{DynamicResource AppFont}"
     ResizeMode="CanResize"
     WindowStartupLocation="CenterOwner"
     mc:Ignorable="d">
@@ -331,7 +330,6 @@
                             AcceptsReturn="True"
                             Background="Transparent"
                             BorderThickness="0"
-                            FontFamily="Consolas,Microsoft YaHei UI"
                             FontSize="13"
                             IsEnabled="{Binding SelectedPromptItem, Converter={cnvt:NullToBoolInverseConverter}}"
                             Text="{Binding SelectedPromptItem.Content, UpdateSourceTrigger=PropertyChanged}"

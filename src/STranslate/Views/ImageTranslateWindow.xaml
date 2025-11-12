@@ -26,7 +26,6 @@
     ui:TitleBar.Height="48"
     ui:WindowHelper.SystemBackdropType="Mica"
     ui:WindowHelper.UseModernWindowStyle="True"
-    FontFamily="{DynamicResource AppFont}"
     Icon="/Resources/app.ico"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
@@ -408,7 +407,6 @@
 
                 <TextBlock
                     HorizontalAlignment="Center"
-                    FontFamily="Microsoft YaHei, Segoe UI, Arial"
                     FontSize="15"
                     FontWeight="Medium"
                     Foreground="White"

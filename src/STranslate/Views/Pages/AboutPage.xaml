@@ -27,7 +27,7 @@
             </Grid.RowDefinitions>
             <TextBlock
                 Margin="0,0,0,12"
-                Style="{DynamicResource TitleTextBlockStyle}"
+                Style="{DynamicResource STranslateTitleTextBlockStyle}"
                 Text="{DynamicResource About}" />
             <ikw:SimpleStackPanel Grid.Row="1" Spacing="4">
 
@@ -113,7 +113,6 @@
                                 VerticalContentAlignment="Center"
                                 Background="Transparent"
                                 BorderThickness="0"
-                                FontFamily="Consolas"
                                 Foreground="{DynamicResource {x:Static ui:ThemeKeys.TextFillColorSecondaryBrushKey}}"
                                 IsReadOnly="True"
                                 IsReadOnlyCaretVisible="False"

@@ -336,8 +336,15 @@ public partial class Settings : ObservableObject
             i18n.ChangeLanguage(Language);
     }
 
-    private void ApplyAppFont() =>
+    private void ApplyAppFont()
+    {
         App.Current.Resources["AppFont"] = new System.Windows.Media.FontFamily(AppFont);
+        App.Current.Resources["ContentControlThemeFontFamily"] = new System.Windows.Media.FontFamily(AppFont);
+
+        // TODO: https://github.com/iNKORE-NET/UI.WPF.Modern/blob/main/source/iNKORE.UI.WPF.Modern/Themes/Controls/TextStyles.xaml#L13
+        // 这句写的有问题  更新后避免更新系统字体键以避免带来其他问题
+        App.Current.Resources[System.Windows.SystemFonts.MessageFontFamilyKey] = new System.Windows.Media.FontFamily(AppFont);
+    }
 
     private void ApplyTheme()
     {
