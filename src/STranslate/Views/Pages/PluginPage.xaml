@@ -133,7 +133,10 @@
                                     <Setter Property="FontFamily" Value="{DynamicResource FluentSystemIcons}" />
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static ui:ThemeKeys.ButtonForegroundPressedKey}}" />
+                                        </Trigger>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Foreground" Value="{DynamicResource {x:Static ui:ThemeKeys.ButtonForegroundDisabledKey}}" />
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
@@ -151,7 +154,10 @@
                                             MouseAction="LeftClick" />
                                     </TextBlock.InputBindings>
                                 </TextBlock>
-                                <TextBlock Style="{StaticResource LinkBtnStyle}" Text="&#xF34C;">
+                                <TextBlock
+                                    IsEnabled="{Binding IsPrePlugin, Converter={cnvt:BoolInverseConverter}}"
+                                    Style="{StaticResource LinkBtnStyle}"
+                                    Text="&#xF34C;">
                                     <TextBlock.InputBindings>
                                         <MouseBinding
                                             Command="{Binding Source={StaticResource VmProxy}, Path=Data.DeletePluginCommand}"
