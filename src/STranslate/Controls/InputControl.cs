@@ -269,10 +269,16 @@ public class InputControl : Control
     /// <summary>
     /// 显示字体大小调节提示
     /// </summary>
+    /// <summary>
+    /// 显示字体大小调节提示
+    /// </summary>
     private void ShowFontSizeHint()
     {
         if (_fontSizeHintBorder == null)
             return;
+
+        // 停止所有正在进行的 Opacity 动画，避免冲突
+        _fontSizeHintBorder.BeginAnimation(UIElement.OpacityProperty, null);
 
         // 设置为可见并完全不透明
         _fontSizeHintBorder.Visibility = Visibility.Visible;
@@ -283,16 +289,28 @@ public class InputControl : Control
         var fadeOutAnimation = new DoubleAnimation(1.0, 0.0, duration)
         {
             EasingFunction = new CubicEase { EasingMode = EasingMode.EaseIn },
-            BeginTime = TimeSpan.FromMilliseconds(200) // 延迟200ms开始淡出
+            BeginTime = TimeSpan.FromMilliseconds(200)
         };
 
-        // 动画完成后隐藏
-        fadeOutAnimation.Completed += (s, e) =>
+        // 动画完成后隐藏 - 使用弱事件处理避免内存泄漏
+        EventHandler? completedHandler = null;
+        completedHandler = (s, e) =>
         {
-            _fontSizeHintBorder?.Visibility = Visibility.Collapsed;
+            // 确保只有当前动画完成才隐藏元素
+            if (s == fadeOutAnimation && _fontSizeHintBorder != null)
+            {
+                _fontSizeHintBorder.Visibility = Visibility.Collapsed;
+            }
+
+            // 取消事件订阅
+            if (fadeOutAnimation != null)
+            {
+                fadeOutAnimation.Completed -= completedHandler;
+            }
         };
 
-        _fontSizeHintBorder.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation, HandoffBehavior.SnapshotAndReplace);
+        fadeOutAnimation.Completed += completedHandler;
+        _fontSizeHintBorder.BeginAnimation(UIElement.OpacityProperty, fadeOutAnimation);
     }
 
     /// <summary>
