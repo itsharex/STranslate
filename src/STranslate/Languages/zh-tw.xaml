@@ -428,9 +428,11 @@
     <sys:String x:Key="NoLocationInfoTitle">無位置信息</sys:String>
     <sys:String x:Key="NoLocationInfoMessage">無法標註和在圖上選取文字。</sys:String>
     <sys:String x:Key="NoLocationInfoMessageForImTrans">無法標註和圖上顯示翻譯結果。</sys:String>
+    <sys:String x:Key="OcrSettingsToolTip" xml:space="preserve">直接滑鼠左擊->獨立視窗配置&#10;Ctrl+滑鼠左擊->文字識別配置</sys:String>
 
     <sys:String x:Key="RecognizeLanguage">辨識語言</sys:String>
     <sys:String x:Key="TranslateLanguage">翻譯語言</sys:String>
+    <sys:String x:Key="ImTranSettingsToolTip" xml:space="preserve">直接滑鼠左擊-&gt;獨立視窗設定&#10;Ctrl+滑鼠左擊-&gt;文字辨識設定&#10;Alt+滑鼠左擊-&gt;文字翻譯配置</sys:String>
 
     <!--  // Snackbar Messages //  -->
     <sys:String x:Key="CopySuccess">複製成功</sys:String>

@@ -427,9 +427,11 @@
     <sys:String x:Key="NoLocationInfoTitle">No Location Info</sys:String>
     <sys:String x:Key="NoLocationInfoMessage">Unable to annotate or select text on the image.</sys:String>
     <sys:String x:Key="NoLocationInfoMessageForImTrans">Unable to annotate and display translation results on the graph.</sys:String>
+    <sys:String x:Key="OcrSettingsToolTip" xml:space="preserve">Left Click -> Standalone Window Settings&#10;Ctrl+Left Click -> Text Recognition Settings</sys:String>
 
     <sys:String x:Key="RecognizeLanguage">Recognize Language</sys:String>
     <sys:String x:Key="TranslateLanguage">Translate Language</sys:String>
+    <sys:String x:Key="ImTranSettingsToolTip" xml:space="preserve">Left Click -> Standalone Window Settings&#10;Ctrl+Left Click -> Text Recognition Settings&#10;Alt+Left Click -> Text Translation Settings</sys:String>
 
     <!--  // Snackbar Messages //  -->
     <sys:String x:Key="CopySuccess">Copied successfully</sys:String>

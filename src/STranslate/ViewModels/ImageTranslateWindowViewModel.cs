@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using Microsoft.Win32;
@@ -7,6 +8,7 @@ using STranslate.Core;
 using STranslate.Helpers;
 using STranslate.Instances;
 using STranslate.Plugin;
+using STranslate.ViewModels.Pages;
 using STranslate.Views;
 using STranslate.Views.Pages;
 using System.Collections.ObjectModel;
@@ -240,15 +242,27 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
         await _mainWindowViewModel.OpenSettingsCommand.ExecuteAsync(null);
 
         if (Keyboard.Modifiers == ModifierKeys.Control)
+        {
             Application.Current.Windows
                 .OfType<SettingsWindow>()
                 .First()
                 .Navigate(nameof(OcrPage));
+
+            if (SelectedOcrEngine != null)
+                Ioc.Default.GetRequiredService<OcrViewModel>()
+                    .SelectedItem = SelectedOcrEngine;
+        }
         else if (Keyboard.Modifiers == ModifierKeys.Alt)
+        {
             Application.Current.Windows
                 .OfType<SettingsWindow>()
                 .First()
                 .Navigate(nameof(TranslatePage));
+
+            if (SelectedTranslateEngine != null)
+                Ioc.Default.GetRequiredService<TranslateViewModel>()
+                    .SelectedItem = SelectedTranslateEngine;
+        }
         else
             Application.Current.Windows
                 .OfType<SettingsWindow>()
