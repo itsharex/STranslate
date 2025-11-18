@@ -31,6 +31,9 @@
     Icon="/Resources/app.ico"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
+    <FrameworkElement.CommandBindings>
+        <CommandBinding Command="{x:Static markdig:Commands.Hyperlink}" Executed="OpenHyperlink" />
+    </FrameworkElement.CommandBindings>
     <Window.InputBindings>
         <KeyBinding
             Key="Esc"
