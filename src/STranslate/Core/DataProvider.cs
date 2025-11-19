@@ -33,6 +33,7 @@ public class DataProvider
         DropdownDataGeneric<StartMode>.UpdateLabels(StartModes);
         DropdownDataGeneric<LogEventLevel>.UpdateLabels(LogEventLevels);
         DropdownDataGeneric<OcrResultShowingType>.UpdateLabels(OcrResultShowingTypes);
+        DropdownDataGeneric<HistoryLimit>.UpdateLabels(HistoryLimits);
     }
 
     #region LangEnums
@@ -129,6 +130,14 @@ public class DataProvider
     public class OcrResultShowingTypeData : DropdownDataGeneric<OcrResultShowingType> { }
     public List<OcrResultShowingTypeData> OcrResultShowingTypes { get; } =
         DropdownDataGeneric<OcrResultShowingType>.GetValues<OcrResultShowingTypeData>("OcrResultShowingType");
+
+    #endregion
+
+    #region HistoryLimits
+
+    public class HistoryLimitData : DropdownDataGeneric<HistoryLimit> { }
+    public List<HistoryLimitData> HistoryLimits { get; } =
+        DropdownDataGeneric<HistoryLimit>.GetValues<HistoryLimitData>("HistoryLimit");
 
     #endregion
 }

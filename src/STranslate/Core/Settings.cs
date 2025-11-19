@@ -39,7 +39,7 @@ public partial class Settings : ObservableObject
 
     [ObservableProperty] public partial ElementTheme ColorScheme { get; set; }
 
-    [ObservableProperty] public partial long TranslateHistoryLimit { get; set; } = 1000;
+    [ObservableProperty] public partial HistoryLimit HistoryLimit { get; set; } = HistoryLimit.Limit1000;
 
     [ObservableProperty] public partial bool IsColorSchemeVisible { get; set; } = true;
 
@@ -545,6 +545,17 @@ public enum OcrResultShowingType
     Original,
     Markdown,
     Latex
+}
+
+public enum HistoryLimit : long
+{
+    NotSave = 0,
+    Limit100 = 100,
+    Limit500 = 500,
+    Limit1000 = 1000,
+    Limit2000 = 2000,
+    Limit5000 = 5000,
+    Unlimited = long.MaxValue,
 }
 
 #endregion

@@ -162,130 +162,34 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
 
         var history = await ExecuteTranslateAsync(checkCacheFirst, cancellationToken);
 
-        if (Settings.TranslateHistoryLimit > 0 && history != null)
+        if (Settings.HistoryLimit > 0 && history != null)
         {
-            await _sqlService.InsertDataAsync(history, Settings.TranslateHistoryLimit).ConfigureAwait(false);
+            await _sqlService.InsertDataAsync(history, (long)Settings.HistoryLimit).ConfigureAwait(false);
         }
-    }
-
-    private async Task<HistoryModel?> ExecuteTranslateAsync(bool checkCacheFirst, CancellationToken cancellationToken)
-    {
-        HistoryModel? history = null;
-        var allServicesCached = true;
-        var enabledSvcs = TranslateInstance.Services.Where(x => x.IsEnabled).ToList();
-        if (enabledSvcs.Count == 0)
-            return history;
-
-        // 检查缓存
-        if (Settings.TranslateHistoryLimit > 0 && checkCacheFirst)
-        {
-            history = await _sqlService.GetDataAsync(InputText, Settings.SourceLang.ToString(), Settings.TargetLang.ToString());
-            if (history != null)
-            {
-                IdentifiedLanguage = _i18n.GetTranslation("IdentifiedCache");
-
-                // 填充结果
-                await Parallel.ForEachAsync(enabledSvcs, cancellationToken, async (svc, _) =>
-                {
-                    if (history.Data.FirstOrDefault(x => x.PluginID == svc.MetaData.PluginID && x.ServiceID == svc.ServiceID) is not HistoryData data)
-                        return;
-                    if (svc.Plugin is ITranslatePlugin tPlugin)
-                    {
-                        var result = JsonSerializer.Deserialize<TranslateResult>(data.Text, HistoryModel.JsonOption);
-                        if (result == null) return;
-                        tPlugin.TransResult.Text = result.Text;
-                        tPlugin.TransResult.IsSuccess = result.IsSuccess;
-                        tPlugin.TransResult.SourceLang = result.SourceLang;
-                        tPlugin.TransResult.TargetLang = result.TargetLang;
-                        //tPlugin.TransResult.Duration = result.Duration;
-
-                        // transBack
-                        if (tPlugin.AutoTransBack &&
-                            !string.IsNullOrWhiteSpace(data.BackText) &&
-                            JsonSerializer.Deserialize<TranslateResult>(data.BackText, HistoryModel.JsonOption) is TranslateResult result1)
-                        {
-                            tPlugin.TransBackResult.Text = result1.Text;
-                            tPlugin.TransBackResult.IsSuccess = result1.IsSuccess;
-                            tPlugin.TransBackResult.SourceLang = result1.SourceLang;
-                            tPlugin.TransBackResult.TargetLang = result1.TargetLang;
-                            //tPlugin.TransBackResult.Duration = result1.Duration;
-                        }
-                    }
-                    else if (svc.Plugin is IDictionaryPlugin dPlugin)
-                    {
-                        var result = JsonSerializer.Deserialize<DictionaryResult>(data.Text, HistoryModel.JsonOption);
-                        if (result == null) return;
-                        dPlugin.DictionaryResult.Text = result.Text;
-                        dPlugin.DictionaryResult.ResultType = result.ResultType;
-                        //dPlugin.DictionaryResult.Duration = result.Duration;
-                        App.Current.Dispatcher.Invoke(() =>
-                        {
-                            result.Symbols.ToList().ForEach(dPlugin.DictionaryResult.Symbols.Add);
-                            result.DictMeans.ToList().ForEach(dPlugin.DictionaryResult.DictMeans.Add);
-                            result.Plurals.ToList().ForEach(dPlugin.DictionaryResult.Plurals.Add);
-                            result.PastTense.ToList().ForEach(dPlugin.DictionaryResult.PastTense.Add);
-                            result.PastParticiple.ToList().ForEach(dPlugin.DictionaryResult.PastParticiple.Add);
-                            result.PresentParticiple.ToList().ForEach(dPlugin.DictionaryResult.PresentParticiple.Add);
-                            result.ThirdPersonSingular.ToList().ForEach(dPlugin.DictionaryResult.ThirdPersonSingular.Add);
-                            result.Comparative.ToList().ForEach(dPlugin.DictionaryResult.Comparative.Add);
-                            result.Superlative.ToList().ForEach(dPlugin.DictionaryResult.Superlative.Add);
-                            result.Sentences.ToList().ForEach(dPlugin.DictionaryResult.Sentences.Add);
-                        });
-                    }
-                });
-
-                foreach (var svc in enabledSvcs)
-                {
-                    if (!history.HasData(svc))
-                    {
-                        allServicesCached = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (history != null && allServicesCached)
-        {
-            return history;
-        }
-
-        // 不完全包含或者无缓存，执行翻译
-        var (_, source, target) = await LanguageDetector.GetLanguageAsync(InputText, cancellationToken, StartProcess, CompleteProcess, FinishProcess);
-
-        var maxConcurrency = Math.Min(enabledSvcs.Count, Environment.ProcessorCount * 10);
-        using var semaphore = new SemaphoreSlim(maxConcurrency, maxConcurrency);
-
-        history ??= new HistoryModel
-        {
-            Time = DateTime.Now,
-            SourceText = InputText,
-            SourceLang = Settings.SourceLang.ToString(),
-            TargetLang = Settings.TargetLang.ToString(),
-            Data = []
-        };
-        var translateTasks = enabledSvcs.Select(svc =>
-            ExecuteTranslationHandlerAsync(svc, source, target, semaphore, history, cancellationToken));
-
-        try
-        {
-            await Task.WhenAll(translateTasks).ConfigureAwait(false);
-        }
-        catch (OperationCanceledException)
-        {
-            // Ignore
-        }
-
-        return history;
     }
 
     [RelayCommand(IncludeCancelCommand = true, CanExecute = nameof(CanTranslate))]
     private async Task SingleTranslateAsync(Service service, CancellationToken cancellationToken)
     {
+        var history = await _sqlService.GetDataAsync(InputText, Settings.SourceLang.ToString(), Settings.TargetLang.ToString());
+
         if (service.Plugin is IDictionaryPlugin dictionaryPlugin &&
             dictionaryPlugin.DictionaryResult.ResultType != DictionaryResultType.NoResult)
         {
-            await ExecuteDictAsync(dictionaryPlugin, cancellationToken).ConfigureAwait(false);
+            var result = await ExecuteDictAsync(dictionaryPlugin, cancellationToken).ConfigureAwait(false);
+            if (result.ResultType == DictionaryResultType.Error)
+                return;
+
+            history ??= new HistoryModel
+            {
+                Time = DateTime.Now,
+                SourceText = InputText,
+                SourceLang = Settings.SourceLang.ToString(),
+                TargetLang = Settings.TargetLang.ToString(),
+                Data = []
+            };
+            // 添加新的历史数据记录并执行字典查询
+            history.Data.Add(new(service) { Text = JsonSerializer.Serialize(result, HistoryModel.JsonOption) });
             return;
         }
 
@@ -296,11 +200,36 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             .GetLanguageAsync(InputText, cancellationToken, StartProcess, CompleteProcess, FinishProcess)
             .ConfigureAwait(false);
 
-        await ExecuteAsync(plugin, source, target, cancellationToken).ConfigureAwait(false);
+        var translateResult = await ExecuteAsync(plugin, source, target, cancellationToken).ConfigureAwait(false);
+        if (!plugin.TransResult.IsSuccess)
+            return;
 
-        if (plugin.TransResult.IsSuccess && plugin.AutoTransBack)
+        history ??= new HistoryModel
         {
-            await ExecuteBackAsync(plugin, target, source, cancellationToken).ConfigureAwait(false);
+            Time = DateTime.Now,
+            SourceText = InputText,
+            SourceLang = Settings.SourceLang.ToString(),
+            TargetLang = Settings.TargetLang.ToString(),
+            Data = []
+        };
+        // 添加新的历史数据记录
+        var historyData = history.GetData(service);
+        if (historyData == null)
+        {
+            historyData = new HistoryData(service);
+            history.Data.Add(historyData);
+        }
+        historyData.Text = JsonSerializer.Serialize(translateResult, HistoryModel.JsonOption);
+
+        if (plugin.AutoTransBack)
+        {
+            var backResult = await ExecuteBackAsync(plugin, target, source, cancellationToken).ConfigureAwait(false);
+            historyData.BackText = JsonSerializer.Serialize(backResult, HistoryModel.JsonOption);
+        }
+
+        if (Settings.HistoryLimit > 0)
+        {
+            await _sqlService.InsertDataAsync(history, (long)Settings.HistoryLimit).ConfigureAwait(false);
         }
     }
 
@@ -310,10 +239,20 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
         if (service.Plugin is not ITranslatePlugin plugin || plugin.TransBackResult.IsProcessing)
             return;
 
+        var history = await _sqlService.GetDataAsync(InputText, Settings.SourceLang.ToString(), Settings.TargetLang.ToString());
+
         var (_, source, target) = await LanguageDetector
             .GetLanguageAsync(InputText, cancellationToken, StartProcess, CompleteProcess, FinishProcess)
             .ConfigureAwait(false);
-        await ExecuteBackAsync(plugin, target, source, cancellationToken).ConfigureAwait(false);
+
+        var backResult = await ExecuteBackAsync(plugin, target, source, cancellationToken).ConfigureAwait(false);
+        if (!plugin.TransResult.IsSuccess)
+            return;
+
+        history?.GetData(service)?.BackText = JsonSerializer.Serialize(backResult, HistoryModel.JsonOption);
+
+        if (Settings.HistoryLimit > 0 && history != null)
+            await _sqlService.InsertDataAsync(history, (long)Settings.HistoryLimit).ConfigureAwait(false);
     }
 
     [RelayCommand]
@@ -335,42 +274,206 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
 
     #region Translation Execution Logic
 
+    private async Task<HistoryModel?> ExecuteTranslateAsync(bool checkCacheFirst, CancellationToken cancellationToken)
+    {
+        var enabledSvcs = TranslateInstance.Services.Where(x => x.IsEnabled).ToList();
+        if (enabledSvcs.Count == 0)
+            return null;
+
+        HistoryModel? history = null;
+        var uncachedSvcs = new List<Service>(enabledSvcs);
+
+        // 尝试从缓存加载
+        if (checkCacheFirst && Settings.HistoryLimit > 0)
+        {
+            history = await _sqlService.GetDataAsync(InputText, Settings.SourceLang.ToString(), Settings.TargetLang.ToString());
+            if (history != null)
+            {
+                IdentifiedLanguage = _i18n.GetTranslation("IdentifiedCache");
+                uncachedSvcs = await PopulateResultsFromCacheAsync(history, enabledSvcs, cancellationToken);
+            }
+        }
+
+        // 如果所有服务都已从缓存加载，则直接返回
+        if (uncachedSvcs.Count == 0)
+        {
+            return history;
+        }
+
+        // 对未缓存的服务执行实时翻译
+        var (_, source, target) = await LanguageDetector.GetLanguageAsync(InputText, cancellationToken, StartProcess, CompleteProcess, FinishProcess);
+
+        history ??= new HistoryModel
+        {
+            Time = DateTime.Now,
+            SourceText = InputText,
+            SourceLang = Settings.SourceLang.ToString(),
+            TargetLang = Settings.TargetLang.ToString(),
+            Data = []
+        };
+
+        await ExecuteTranslationForServicesAsync(uncachedSvcs, source, target, history, cancellationToken);
+
+        return history;
+    }
+
+    /// <summary>
+    /// 从缓存填充翻译结果，并返回未缓存的服务列表
+    /// </summary>
+    private async Task<List<Service>> PopulateResultsFromCacheAsync(HistoryModel history, List<Service> services, CancellationToken cancellationToken)
+    {
+        var uncachedServices = new List<Service>();
+        var populateTasks = services.Select(async svc =>
+        {
+            if (history.GetData(svc) is { } data)
+            {
+                await PopulateServiceResultFromDataAsync(svc, data);
+                if (!history.HasData(svc)) // 检查是否需要反向翻译
+                {
+                    uncachedServices.Add(svc);
+                }
+            }
+            else
+            {
+                uncachedServices.Add(svc);
+            }
+        });
+        await Task.WhenAll(populateTasks);
+        return uncachedServices;
+    }
+
+    /// <summary>
+    /// 根据历史数据填充单个服务的结果
+    /// </summary>
+    private async Task PopulateServiceResultFromDataAsync(Service svc, HistoryData data)
+    {
+        if (svc.Plugin is ITranslatePlugin tPlugin)
+        {
+            if (JsonSerializer.Deserialize<TranslateResult>(data.Text, HistoryModel.JsonOption) is { } result)
+            {
+                tPlugin.TransResult.Update(result);
+            }
+
+            if (tPlugin.AutoTransBack && !string.IsNullOrWhiteSpace(data.BackText) &&
+                JsonSerializer.Deserialize<TranslateResult>(data.BackText, HistoryModel.JsonOption) is { } backResult)
+            {
+                tPlugin.TransBackResult.Update(backResult);
+            }
+        }
+        else if (svc.Plugin is IDictionaryPlugin dPlugin)
+        {
+            if (JsonSerializer.Deserialize<DictionaryResult>(data.Text, HistoryModel.JsonOption) is { } result)
+            {
+                dPlugin.DictionaryResult.Update(result);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 为指定的服务列表执行翻译
+    /// </summary>
+    private async Task ExecuteTranslationForServicesAsync(IEnumerable<Service> services, LangEnum source, LangEnum target, HistoryModel history, CancellationToken cancellationToken)
+    {
+        var maxConcurrency = Math.Min(services.Count(), Environment.ProcessorCount * 10);
+        using var semaphore = new SemaphoreSlim(maxConcurrency, maxConcurrency);
+
+        var translateTasks = services.Select(svc =>
+            ExecuteTranslationHandlerAsync(svc, source, target, semaphore, history, cancellationToken));
+
+        try
+        {
+            await Task.WhenAll(translateTasks).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException)
+        {
+            // Ignore
+        }
+    }
+
     private async Task ExecuteTranslationHandlerAsync(Service svc, LangEnum source, LangEnum target,
         SemaphoreSlim semaphore, HistoryModel history, CancellationToken cancellationToken)
     {
         await semaphore.WaitAsync(cancellationToken).ConfigureAwait(false);
         try
         {
-            // 判断如果缓存中存在则跳过
-            if (history.GetData(svc) != null) return;
-
-            history.Data.Add(new HistoryData
+            switch (svc.Plugin)
             {
-                PluginID = svc.MetaData.PluginID,
-                ServiceID = svc.ServiceID,
-                Text = string.Empty,
-                BackText = string.Empty
-            });
-            if (svc.Plugin is ITranslatePlugin tPlugin)
-            {
-                var result = await ExecuteAsync(tPlugin, source, target, cancellationToken).ConfigureAwait(false);
-                history.GetData(svc)?.Text = JsonSerializer.Serialize(result, HistoryModel.JsonOption);
-                if (tPlugin.TransResult.IsSuccess && tPlugin.AutoTransBack)
-                {
-                    var backResult = await ExecuteBackAsync(tPlugin, target, source, cancellationToken).ConfigureAwait(false);
-                    history.GetData(svc)?.BackText = JsonSerializer.Serialize(backResult, HistoryModel.JsonOption);
-                }
-            }
-            else if (svc.Plugin is IDictionaryPlugin dPlugin)
-            {
-                var result = await ExecuteDictAsync(dPlugin, cancellationToken).ConfigureAwait(false);
-                history.GetData(svc)?.Text = JsonSerializer.Serialize(result, HistoryModel.JsonOption);
+                case ITranslatePlugin translatePlugin:
+                    await ProcessTranslatePluginAsync(svc, translatePlugin, source, target, history, cancellationToken).ConfigureAwait(false);
+                    break;
+                case IDictionaryPlugin dictionaryPlugin:
+                    await ProcessDictionaryPluginAsync(svc, dictionaryPlugin, history, cancellationToken).ConfigureAwait(false);
+                    break;
             }
         }
         finally
         {
             semaphore.Release();
         }
+    }
+
+    private async Task ProcessTranslatePluginAsync(Service service, ITranslatePlugin plugin, LangEnum source, LangEnum target,
+        HistoryModel history, CancellationToken cancellationToken)
+    {
+        // 如果历史记录中没有该服务的数据，则执行全新翻译
+        if (history.GetData(service) == null)
+        {
+            await ExecuteNewTranslationAsync(service, plugin, source, target, history, cancellationToken).ConfigureAwait(false);
+        }
+        // 否则，只执行反向翻译（如果需要）
+        else if (plugin.AutoTransBack && string.IsNullOrEmpty(history.GetData(service)?.BackText))
+        {
+            await ExecuteBackTranslationOnlyAsync(service, plugin, target, source, history, cancellationToken).ConfigureAwait(false);
+        }
+    }
+
+    private async Task ExecuteNewTranslationAsync(Service service, ITranslatePlugin plugin, LangEnum source, LangEnum target,
+        HistoryModel history, CancellationToken cancellationToken)
+    {
+        // 执行主翻译
+        var translateResult = await ExecuteAsync(plugin, source, target, cancellationToken).ConfigureAwait(false);
+        if (!plugin.TransResult.IsSuccess)
+            return;
+
+        // 添加新的历史数据记录
+        var historyData = new HistoryData(service);
+        history.Data.Add(historyData);
+        historyData.Text = JsonSerializer.Serialize(translateResult, HistoryModel.JsonOption);
+
+        // 执行反向翻译（如果需要且主翻译成功）
+        if (plugin.AutoTransBack)
+        {
+            var backResult = await ExecuteBackAsync(plugin, target, source, cancellationToken).ConfigureAwait(false);
+            historyData.BackText = JsonSerializer.Serialize(backResult, HistoryModel.JsonOption);
+        }
+    }
+
+    private async Task ExecuteBackTranslationOnlyAsync(Service service, ITranslatePlugin plugin, LangEnum target, LangEnum source,
+        HistoryModel history, CancellationToken cancellationToken)
+    {
+        var backResult = await ExecuteBackAsync(plugin, target, source, cancellationToken).ConfigureAwait(false);
+        if (!plugin.TransResult.IsSuccess)
+            return;
+
+        var historyData = history.GetData(service);
+        historyData?.BackText = JsonSerializer.Serialize(backResult, HistoryModel.JsonOption);
+    }
+
+    private async Task ProcessDictionaryPluginAsync(Service service, IDictionaryPlugin plugin,
+        HistoryModel history, CancellationToken cancellationToken)
+    {
+        // 如果缓存中已存在数据则跳过
+        if (history.HasData(service))
+            return;
+
+        var result = await ExecuteDictAsync(plugin, cancellationToken).ConfigureAwait(false);
+        if (result.ResultType == DictionaryResultType.Error)
+            return;
+
+        // 添加新的历史数据记录并执行字典查询
+        var historyData = new HistoryData(service);
+        history.Data.Add(historyData);
+        historyData.Text = JsonSerializer.Serialize(result, HistoryModel.JsonOption);
     }
 
     private async Task<DictionaryResult> ExecuteDictAsync(IDictionaryPlugin plugin, CancellationToken cancellationToken)

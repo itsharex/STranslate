@@ -500,6 +500,16 @@ public class HistoryData
     public string ServiceID { get; set; } = string.Empty;
     public string Text { get; set; } = string.Empty;
     public string BackText { get; set; } = string.Empty;
+
+    public HistoryData()
+    {
+    }
+
+    public HistoryData(Service svc)
+    {
+        PluginID = svc.MetaData.PluginID;
+        ServiceID = svc.ServiceID;
+    }
 }
 
 #endregion

@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace STranslate.Plugin;
@@ -237,6 +238,18 @@ public partial class TranslateResult : ObservableObject
     }
 
     /// <summary>
+    /// 更新结果
+    /// </summary>
+    /// <param name="other"></param>
+    public void Update(TranslateResult other)
+    {
+        Text = other.Text;
+        IsSuccess = other.IsSuccess;
+        SourceLang = other.SourceLang;
+        TargetLang = other.TargetLang;
+    }
+
+    /// <summary>
     /// 是否成功
     /// </summary>
     [ObservableProperty] public partial bool IsSuccess { get; set; } = true;
@@ -313,6 +326,29 @@ public interface IDictionaryPlugin : IPlugin
 /// </summary>
 public partial class DictionaryResult : ObservableObject
 {
+    /// <summary>
+    /// 更新结果
+    /// </summary>
+    /// <param name="other"></param>
+    public void Update(DictionaryResult other)
+    {
+        Text = other.Text;
+        ResultType = other.ResultType;
+
+        Application.Current.Dispatcher.Invoke(() =>
+        {
+            other.Symbols.ToList().ForEach(Symbols.Add);
+            other.DictMeans.ToList().ForEach(DictMeans.Add);
+            other.Plurals.ToList().ForEach(Plurals.Add);
+            other.PastTense.ToList().ForEach(PastTense.Add);
+            other.PastParticiple.ToList().ForEach(PastParticiple.Add);
+            other.PresentParticiple.ToList().ForEach(PresentParticiple.Add);
+            other.ThirdPersonSingular.ToList().ForEach(ThirdPersonSingular.Add);
+            other.Comparative.ToList().ForEach(Comparative.Add);
+            other.Superlative.ToList().ForEach(Superlative.Add);
+            other.Sentences.ToList().ForEach(Sentences.Add);
+        });
+    }
     /// <summary>
     /// 结果类型
     /// </summary>

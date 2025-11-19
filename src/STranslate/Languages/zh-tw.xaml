@@ -72,6 +72,7 @@
     <sys:String x:Key="General_ShowPrompt">提示詞</sys:String>
     <sys:String x:Key="General_ShowPromptDescription">主介面是否顯示 AI 翻譯服務的提示詞切換按鈕</sys:String>
     <sys:String x:Key="General_FontFamily">字體</sys:String>
+    <sys:String x:Key="General_HistoryCount">歷史記錄數量</sys:String>
 
     <!--  // Hotkey Page //  -->
     <sys:String x:Key="GlobalHotkeys">全域快速鍵</sys:String>
@@ -377,6 +378,14 @@
     <sys:String x:Key="OcrResultShowingTypeOriginal">原始文字</sys:String>
     <sys:String x:Key="OcrResultShowingTypeMarkdown">Markdown</sys:String>
     <sys:String x:Key="OcrResultShowingTypeLatex">Latex</sys:String>
+
+    <sys:String x:Key="HistoryLimitNotSave">不儲存</sys:String>
+    <sys:String x:Key="HistoryLimitLimit100">100</sys:String>
+    <sys:String x:Key="HistoryLimitLimit500">500</sys:String>
+    <sys:String x:Key="HistoryLimitLimit1000">1000</sys:String>
+    <sys:String x:Key="HistoryLimitLimit2000">2000</sys:String>
+    <sys:String x:Key="HistoryLimitLimit5000">5000</sys:String>
+    <sys:String x:Key="HistoryLimitUnlimited">無限制</sys:String>
 
     <!--  // Plugins //  -->
     <sys:String x:Key="UnsupportedSourceLang">不支援的來源語言</sys:String>

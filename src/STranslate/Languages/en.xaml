@@ -72,6 +72,7 @@
     <sys:String x:Key="General_ShowPrompt">Show Prompt</sys:String>
     <sys:String x:Key="General_ShowPromptDescription">Whether to display the prompt switch button for AI translation services on the main interface</sys:String>
     <sys:String x:Key="General_FontFamily">FontFamily</sys:String>
+    <sys:String x:Key="General_HistoryCount">History Count</sys:String>
 
     <!--  // Hotkey Page //  -->
     <sys:String x:Key="GlobalHotkeys">Global Hotkeys</sys:String>
@@ -376,6 +377,14 @@
     <sys:String x:Key="OcrResultShowingTypeOriginal">Original</sys:String>
     <sys:String x:Key="OcrResultShowingTypeMarkdown">Markdown</sys:String>
     <sys:String x:Key="OcrResultShowingTypeLatex">Latex</sys:String>
+
+    <sys:String x:Key="HistoryLimitNotSave">Don't Save</sys:String>
+    <sys:String x:Key="HistoryLimitLimit100">100</sys:String>
+    <sys:String x:Key="HistoryLimitLimit500">500</sys:String>
+    <sys:String x:Key="HistoryLimitLimit1000">1000</sys:String>
+    <sys:String x:Key="HistoryLimitLimit2000">2000</sys:String>
+    <sys:String x:Key="HistoryLimitLimit5000">5000</sys:String>
+    <sys:String x:Key="HistoryLimitUnlimited">Unlimited</sys:String>
 
     <!--  // Plugins //  -->
     <sys:String x:Key="UnsupportedSourceLang">Unsupported source language</sys:String>
