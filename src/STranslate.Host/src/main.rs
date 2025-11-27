@@ -3,12 +3,13 @@ mod commands;
 use clap::{Arg, ArgAction, Command};
 
 use crate::commands::{
-    StartMode, TaskAction, handle_start_command, handle_task_command, handle_update_command,
+    BackupMode, StartMode, TaskAction, handle_backup_command, handle_start_command,
+    handle_task_command, handle_update_command,
 };
 
 fn main() {
     let matches = Command::new("z_stranslate_host")
-        .version("1.0.1")
+        .version("1.0.2")
         .author("ZGGSONG <zggsong@foxmail.com>")
         .about("程序更新和后台启动工具")
         .subcommand(
@@ -173,6 +174,70 @@ fn main() {
                         .help("显示详细输出"),
                 ),
         )
+        .subcommand(
+            Command::new("backup")
+                .about("备份或恢复指定目录")
+                .arg(
+                    Arg::new("mode")
+                        .short('m')
+                        .long("mode")
+                        .value_name("MODE")
+                        .help("选择备份或恢复")
+                        .value_parser(clap::value_parser!(BackupMode))
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("archive")
+                        .short('a')
+                        .long("archive")
+                        .value_name("FILE")
+                        .help("备份文件路径（zip）")
+                        .required(true),
+                )
+                .arg(
+                    Arg::new("folder")
+                        .short('f')
+                        .long("folder")
+                        .value_name("PATH")
+                        .help("需要备份的目录，支持多次重复指定")
+                        .action(ArgAction::Append)
+                        .required_if_eq("mode", "backup"),
+                )
+                .arg(
+                    Arg::new("source-folder")
+                        .short('s')
+                        .long("source-folder")
+                        .value_name("NAME")
+                        .help("备份包中要恢复的目录名称，可重复指定")
+                        .action(ArgAction::Append)
+                        .required_if_eq("mode", "restore"),
+                )
+                .arg(
+                    Arg::new("target-folder")
+                        .short('t')
+                        .long("target-folder")
+                        .value_name("PATH")
+                        .help("恢复后的目标目录（会覆盖原内容），可重复指定")
+                        .action(ArgAction::Append)
+                        .required_if_eq("mode", "restore"),
+                )
+                .arg(
+                    Arg::new("delay")
+                        .short('d')
+                        .long("delay")
+                        .value_name("SECONDS")
+                        .help("启动延迟（秒）")
+                        .default_value("0")
+                        .value_parser(clap::value_parser!(u64)),
+                )
+                .arg(
+                    Arg::new("verbose")
+                        .short('v')
+                        .long("verbose")
+                        .action(ArgAction::SetTrue)
+                        .help("显示详细输出"),
+                ),
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -194,8 +259,14 @@ fn main() {
                 std::process::exit(1);
             }
         }
+        Some(("backup", sub_matches)) => {
+            if let Err(e) = handle_backup_command(sub_matches) {
+                eprintln!("❌ 备份操作失败: {}", e);
+                std::process::exit(1);
+            }
+        }
         _ => {
-            eprintln!("❌ 请指定命令: update、start 或 task");
+            eprintln!("❌ 请指定命令: update、start、task 或 backup");
             eprintln!("使用 --help 查看帮助信息");
             std::process::exit(1);
         }
