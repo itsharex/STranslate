@@ -118,6 +118,8 @@ public partial class App : ISingleInstanceApp, INavigation, IDisposable
                     services.AddSingleton<IScreenshot, Screenshot>();
                     services.AddSingleton<ISnackbar, Snackbar>();
 
+                    services.AddSingleton<BackupService>();
+
                     // 注册数据提供程序
                     services.AddSingleton<DataProvider>();
 
@@ -268,7 +270,7 @@ public partial class App : ISingleInstanceApp, INavigation, IDisposable
                 return;
             }
 
-            _ = Ioc.Default.GetRequiredService<ViewModels.Pages.AboutViewModel>()
+            _ = Ioc.Default.GetRequiredService<BackupService>()
                 .PostWebDavBackupAsync(filePath);
         }
         catch (Exception ex)

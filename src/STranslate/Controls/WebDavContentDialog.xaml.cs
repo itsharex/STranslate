@@ -4,7 +4,7 @@ using iNKORE.UI.WPF.Modern.Controls;
 using Microsoft.Extensions.Logging;
 using STranslate.Core;
 using STranslate.Plugin;
-using STranslate.ViewModels.Pages;
+using STranslate.Services;
 using System.Collections.ObjectModel;
 using System.IO;
 using WebDav;
