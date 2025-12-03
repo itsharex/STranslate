@@ -563,10 +563,40 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
             return image;
         }
 
+        // 获取源图像的 DPI 和缩放比例
+        double dpiX = image.DpiX > 0 ? image.DpiX : 96;
+        double dpiY = image.DpiY > 0 ? image.DpiY : 96;
+        double pixelsPerDip = dpiX / 96.0;
+
+        // ---------------------------------------------------------
+        // 修复：针对小图进行超采样渲染 (Super-sampling)
+        // 如果图片较小，强制放大渲染尺寸，以保证文字矢量绘制的清晰度
+        // ---------------------------------------------------------
+        double scaleFactor = 1.0;
+        double minDimension = Math.Min(image.PixelWidth, image.PixelHeight);
+        
+        // 如果最小边小于 1000 像素，进行放大，最大放大倍数为 4 倍
+        if (minDimension < 1000)
+        {
+            scaleFactor = Math.Min(4.0, 1000.0 / minDimension);
+            // 确保至少放大 2 倍以获得较好的抗锯齿效果
+            scaleFactor = Math.Max(scaleFactor, 2.0);
+        }
+
+        // 计算渲染目标尺寸
+        int renderWidth = (int)(image.PixelWidth * scaleFactor);
+        int renderHeight = (int)(image.PixelHeight * scaleFactor);
+
         var drawingVisual = new DrawingVisual();
 
         using (var drawingContext = drawingVisual.RenderOpen())
         {
+            // 关键修复：应用缩放变换
+            // 1. pixelsPerDip: 抵消 WPF DPI 缩放，回归物理像素坐标
+            // 2. scaleFactor: 应用超采样缩放
+            double totalScale = scaleFactor / pixelsPerDip;
+            drawingContext.PushTransform(new ScaleTransform(totalScale, totalScale));
+
             // 绘制原始图像
             drawingContext.DrawImage(image, new Rect(0, 0, image.PixelWidth, image.PixelHeight));
 
@@ -576,16 +606,20 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
                 if (item.BoxPoints == null || item.BoxPoints.Count == 0 || string.IsNullOrEmpty(item.Text))
                     continue;
 
-                DrawTranslatedTextOverlay(drawingContext, item);
+                // 传递 pixelsPerDip 以确保文字渲染清晰度
+                DrawTranslatedTextOverlay(drawingContext, item, pixelsPerDip);
             }
+            
+            // 恢复变换
+            drawingContext.Pop();
         }
 
-        // 使用标准 96 DPI
+        // 关键修复：使用源图像的 DPI，但尺寸是放大后的
         var renderBitmap = new RenderTargetBitmap(
-            image.PixelWidth,
-            image.PixelHeight,
-            96,
-            96,
+            renderWidth,
+            renderHeight,
+            dpiX,
+            dpiY,
             PixelFormats.Pbgra32
         );
 
@@ -600,7 +634,8 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
     /// </summary>
     /// <param name="drawingContext">绘图上下文</param>
     /// <param name="content">包含翻译文本和位置信息的内容</param>
-    private void DrawTranslatedTextOverlay(DrawingContext drawingContext, OcrContent content)
+    /// <param name="pixelsPerDip">DPI缩放比例</param>
+    private void DrawTranslatedTextOverlay(DrawingContext drawingContext, OcrContent content, double pixelsPerDip)
     {
         var boundingRect = CalculateBoundingRect(content.BoxPoints!);
 
@@ -619,7 +654,7 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
         var textBrush = new SolidColorBrush(Colors.Black);
         textBrush.Freeze();
 
-        var formattedText = CreateOptimalText(content.Text, boundingRect, textBrush);
+        var formattedText = CreateOptimalText(content.Text, boundingRect, textBrush, pixelsPerDip);
 
         // 居中绘制文本
         var textPosition = new Point(
@@ -636,8 +671,9 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
     /// <param name="text">文本内容</param>
     /// <param name="boundingRect">目标区域</param>
     /// <param name="textBrush">文本画刷</param>
+    /// <param name="pixelsPerDip">DPI缩放比例</param>
     /// <returns>格式化文本</returns>
-    private FormattedText CreateOptimalText(string text, Rect boundingRect, Brush textBrush)
+    private FormattedText CreateOptimalText(string text, Rect boundingRect, Brush textBrush, double pixelsPerDip)
     {
         const double minFontSize = 6;
         const double maxFontSize = 48;
@@ -652,15 +688,15 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
 
         // 使用二分查找优化字体大小
         var optimalSize = FindOptimalFontSize(text, estimatedFontSize, minFontSize, maxFontSize,
-            availableWidth, availableHeight, textBrush);
+            availableWidth, availableHeight, textBrush, pixelsPerDip);
 
-        var formattedText = CreateFormattedText(text, optimalSize, textBrush, availableWidth);
+        var formattedText = CreateFormattedText(text, optimalSize, textBrush, availableWidth, pixelsPerDip);
 
         // 如果文本仍然过大，进行截断处理
         if (formattedText.Height > availableHeight)
         {
-            var truncatedText = TruncateTextToFit(text, optimalSize, availableWidth, availableHeight);
-            formattedText = CreateFormattedText(truncatedText, optimalSize, textBrush, availableWidth);
+            var truncatedText = TruncateTextToFit(text, optimalSize, availableWidth, availableHeight, pixelsPerDip);
+            formattedText = CreateFormattedText(truncatedText, optimalSize, textBrush, availableWidth, pixelsPerDip);
         }
 
         return formattedText;
@@ -670,7 +706,7 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
     /// 使用二分查找确定最优字体大小
     /// </summary>
     private double FindOptimalFontSize(string text, double initialSize, double minSize, double maxSize,
-        double availableWidth, double availableHeight, Brush textBrush)
+        double availableWidth, double availableHeight, Brush textBrush, double pixelsPerDip)
     {
         double bestSize = minSize;
         double low = minSize;
@@ -679,7 +715,7 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
         while (high - low > 0.5)
         {
             var mid = (low + high) / 2;
-            var testText = CreateFormattedText(text, mid, textBrush, availableWidth);
+            var testText = CreateFormattedText(text, mid, textBrush, availableWidth, pixelsPerDip);
 
             if (testText.Height <= availableHeight && testText.Width <= availableWidth)
             {
@@ -698,7 +734,7 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
     /// <summary>
     /// 截断文本以适应区域
     /// </summary>
-    private string TruncateTextToFit(string text, double fontSize, double availableWidth, double availableHeight)
+    private string TruncateTextToFit(string text, double fontSize, double availableWidth, double availableHeight, double pixelsPerDip)
     {
         // 估算可容纳的字符数
         var estimatedCharsPerLine = Math.Max(1, (int)(availableWidth / (fontSize * 0.6)));
@@ -713,7 +749,7 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
         // 进一步验证和调整
         while (truncated.Length > 4)
         {
-            var testText = CreateFormattedText(truncated, fontSize, new SolidColorBrush(Colors.Black), availableWidth);
+            var testText = CreateFormattedText(truncated, fontSize, new SolidColorBrush(Colors.Black), availableWidth, pixelsPerDip);
             if (testText.Height <= availableHeight) break;
 
             truncated = truncated.Length > 6
@@ -727,7 +763,7 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
     /// <summary>
     /// 创建格式化文本对象
     /// </summary>
-    private FormattedText CreateFormattedText(string text, double fontSize, Brush textBrush, double maxWidth)
+    private FormattedText CreateFormattedText(string text, double fontSize, Brush textBrush, double maxWidth, double pixelsPerDip)
     {
         var formattedText = new FormattedText(
             text,
@@ -736,7 +772,7 @@ public partial class ImageTranslateWindowViewModel : ObservableObject, IDisposab
             new Typeface("Microsoft YaHei, Arial, SimSun"),
             fontSize,
             textBrush,
-            96);
+            pixelsPerDip); // 关键修复：使用正确的缩放比例，而不是硬编码的 96
 
         formattedText.MaxTextWidth = maxWidth;
         return formattedText;
