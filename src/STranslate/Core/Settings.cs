@@ -492,7 +492,7 @@ public partial class Settings : ObservableObject
         var externalCallService = Ioc.Default.GetRequiredService<ExternalCallService>();
         if (EnableExternalCall)
         {
-            var result = externalCallService.StartService($"http://localhost:{ExternalCallPort}/");
+            var result = externalCallService.StartService($"http://127.0.0.1:{ExternalCallPort}/");
             if (!result)
             {
                 EnableExternalCall = false;
