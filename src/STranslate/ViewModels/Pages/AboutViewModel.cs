@@ -38,6 +38,9 @@ public partial class AboutViewModel(
     }
 
     [RelayCommand]
+    private void Donate() => Process.Start(new ProcessStartInfo(Constant.Sponsor) { UseShellExecute = true });
+
+    [RelayCommand]
     private void LocateUserData() => Locate(Path.GetDirectoryName(Path.Combine(DataLocation.SettingsDirectory)));
 
     [RelayCommand]

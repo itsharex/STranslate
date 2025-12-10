@@ -236,11 +236,6 @@
     <sys:String x:Key="SettingsDirectory">Settings Directory</sys:String>
     <sys:String x:Key="LogsDirectory">Logs Directory</sys:String>
     <sys:String x:Key="CacheDirectory">Cache Directory</sys:String>
-    <sys:String x:Key="CloneRepository">Clone repository</sys:String>
-    <sys:String x:Key="Website">Website</sys:String>
-    <sys:String x:Key="Sponsor">Sponsor</sys:String>
-    <sys:String x:Key="Group">Group</sys:String>
-    <sys:String x:Key="Report">Find a bug or request new sample</sys:String>
     <sys:String x:Key="ConfirmDelete">Confirm Delete?</sys:String>
     <sys:String x:Key="ConfirmDeleteService">Are you sure you want to delete service '{0}'?</sys:String>
     <sys:String x:Key="Close">Close</sys:String>
@@ -272,6 +267,11 @@
     <sys:String x:Key="Version">Version</sys:String>
     <sys:String x:Key="CheckUpdate">Check Update</sys:String>
     <sys:String x:Key="NoCheckUpdataInDev">Update checking is disabled in development mode</sys:String>
+    <sys:String x:Key="Donate">Donate</sys:String>
+    <sys:String x:Key="OfficialWebsite">Official website</sys:String>
+    <sys:String x:Key="Website">Website</sys:String>
+    <sys:String x:Key="Group">Group</sys:String>
+    <sys:String x:Key="Thanks">Thanks</sys:String>
 
     <!--  // Common //  -->
     <sys:String x:Key="Add">Add</sys:String>

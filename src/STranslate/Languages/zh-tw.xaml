@@ -236,11 +236,6 @@
     <sys:String x:Key="SettingsDirectory">設定目錄</sys:String>
     <sys:String x:Key="LogsDirectory">日誌目錄</sys:String>
     <sys:String x:Key="CacheDirectory">快取目錄</sys:String>
-    <sys:String x:Key="CloneRepository">複製存庫</sys:String>
-    <sys:String x:Key="Website">網站</sys:String>
-    <sys:String x:Key="Sponsor">贊助</sys:String>
-    <sys:String x:Key="Group">群組</sys:String>
-    <sys:String x:Key="Report">發現Bug或請求新功能</sys:String>
     <sys:String x:Key="ConfirmDelete">確認刪除?</sys:String>
     <sys:String x:Key="ConfirmDeleteService">確定要刪除服務 '{0}' 嗎？</sys:String>
     <sys:String x:Key="Close">關閉</sys:String>
@@ -272,6 +267,11 @@
     <sys:String x:Key="Version">版本</sys:String>
     <sys:String x:Key="CheckUpdate">檢查更新</sys:String>
     <sys:String x:Key="NoCheckUpdataInDev">開發模式下禁止檢查更新</sys:String>
+    <sys:String x:Key="Donate">贊助</sys:String>
+    <sys:String x:Key="OfficialWebsite">官網</sys:String>
+    <sys:String x:Key="Website">網站</sys:String>
+    <sys:String x:Key="Group">群組</sys:String>
+    <sys:String x:Key="Thanks">致謝</sys:String>
 
     <!--  // Common //  -->
     <sys:String x:Key="Add">新增</sys:String>

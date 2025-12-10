@@ -236,11 +236,6 @@
     <sys:String x:Key="SettingsDirectory">设置目录</sys:String>
     <sys:String x:Key="LogsDirectory">日志目录</sys:String>
     <sys:String x:Key="CacheDirectory">缓存目录</sys:String>
-    <sys:String x:Key="CloneRepository">仓库</sys:String>
-    <sys:String x:Key="Website">网站</sys:String>
-    <sys:String x:Key="Sponsor">赞助</sys:String>
-    <sys:String x:Key="Group">群组</sys:String>
-    <sys:String x:Key="Report">发现Bug或请求新功能</sys:String>
     <sys:String x:Key="ConfirmDelete">确认删除?</sys:String>
     <sys:String x:Key="ConfirmDeleteService">确定要删除服务 '{0}' 吗？</sys:String>
     <sys:String x:Key="Close">关闭</sys:String>
@@ -272,6 +267,11 @@
     <sys:String x:Key="Version">版本</sys:String>
     <sys:String x:Key="CheckUpdate">检查更新</sys:String>
     <sys:String x:Key="NoCheckUpdataInDev">开发模式下禁止检查更新</sys:String>
+    <sys:String x:Key="Donate">赞助</sys:String>
+    <sys:String x:Key="OfficialWebsite">官网</sys:String>
+    <sys:String x:Key="Website">网站</sys:String>
+    <sys:String x:Key="Group">群组</sys:String>
+    <sys:String x:Key="Thanks">鸣谢</sys:String>
 
     <!--  // Common //  -->
     <sys:String x:Key="Add">添加</sys:String>

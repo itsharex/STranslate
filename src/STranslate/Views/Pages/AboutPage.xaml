@@ -155,26 +155,27 @@
                                 <Button Command="{Binding CheckUpdateCommand}">
                                     <ui:IconAndText Content="{DynamicResource CheckUpdate}" Icon="{x:Static ui:FluentSystemIcons.GlobeArrowUp_20_Regular}" />
                                 </Button>
-                                <Button Command="{Binding CheckUpdateCommand}" Style="{DynamicResource {x:Static ui:ThemeKeys.AccentButtonStyleKey}}">
-                                    <ui:IconAndText Content="赞助作者" Icon="{x:Static ui:FluentSystemIcons.DrinkCoffee_20_Filled}" />
+                                <Button Command="{Binding DonateCommand}" Style="{DynamicResource {x:Static ui:ThemeKeys.AccentButtonStyleKey}}">
+                                    <ui:IconAndText Content="{DynamicResource Donate}" Icon="{x:Static ui:FluentSystemIcons.DrinkCoffee_20_Filled}" />
                                 </Button>
                             </ikw:SimpleStackPanel>
                         </ui:SettingsCard>
 
-                        <ui:SettingsCard Header="{DynamicResource Website}">
-                            <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="6">
-                                <ui:HyperlinkButton Content="官网" NavigateUri="{x:Static core:Constant.WebsiteUri}" />
-                                <ui:HyperlinkButton Content="群组" NavigateUri="{x:Static core:Constant.GroupUri}" />
+                        <ui:SettingsCard Margin="0,0,-10,0" Header="{DynamicResource Website}">
+                            <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="2">
+                                <ui:HyperlinkButton Content="{DynamicResource OfficialWebsite}" NavigateUri="{x:Static core:Constant.WebsiteUri}" />
+                                <ui:HyperlinkButton Content="{DynamicResource Group}" NavigateUri="{x:Static core:Constant.GroupUri}" />
                                 <ui:HyperlinkButton Content="Github" NavigateUri="{x:Static core:Constant.GithubUri}" />
                                 <ui:HyperlinkButton Content="Issue" NavigateUri="{x:Static core:Constant.ReportUri}" />
                             </ikw:SimpleStackPanel>
                         </ui:SettingsCard>
 
-                        <ui:SettingsCard Header="鸣谢">
-                            <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="6">
+                        <ui:SettingsCard Margin="0,0,-10,0" Header="{DynamicResource Thanks}">
+                            <ikw:SimpleStackPanel Orientation="Horizontal" Spacing="2">
                                 <ui:HyperlinkButton Content="Flow Launcher" NavigateUri="{x:Static core:Constant.FlowLauncherUri}" />
                                 <ui:HyperlinkButton Content="UI.WPF.Modern" NavigateUri="{x:Static core:Constant.UiWpfMordenUri}" />
                                 <ui:HyperlinkButton Content="Bob" NavigateUri="{x:Static core:Constant.BobUri}" />
+                                <ui:HyperlinkButton Content="Icons8" NavigateUri="{x:Static core:Constant.Icons8Uri}" />
                             </ikw:SimpleStackPanel>
                         </ui:SettingsCard>
                     </ui:SettingsExpander.Items>
