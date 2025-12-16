@@ -61,6 +61,9 @@
     <sys:String x:Key="General_ScreenshotTranslateInImageDescription">截圖翻譯時是否啟用圖片內翻譯。</sys:String>
     <sys:String x:Key="General_ScreenshotTranslateInImageButtonVisible">在主界面顯示啟用圖片內翻譯按鈕。</sys:String>
     <sys:String x:Key="General_HideNotifyIcon">隱藏托盤圖示</sys:String>
+    <sys:String x:Key="General_ShowScreenshotItemInNotifyIconMenu">托盤顯示截圖翻譯選項</sys:String>
+    <sys:String x:Key="General_ShowOcrItemInNotifyIconMenu">托盤顯示文字識別選項</sys:String>
+    <sys:String x:Key="General_ShowQrCodeItemInNotifyIconMenu">托盤顯示二維碼選項</sys:String>
     <sys:String x:Key="General_ColorTheme">顏色主題</sys:String>
     <sys:String x:Key="General_ColorThemeDescription">選擇要顯示的顏色主題。</sys:String>
     <sys:String x:Key="General_ColorThemeButtonVisible">主界面顯示顏色主題按鈕</sys:String>
@@ -298,6 +301,7 @@
     <sys:String x:Key="IdentifiedLanguageLabel">識別為</sys:String>
     <sys:String x:Key="On">開啟</sys:String>
     <sys:String x:Key="Off">關閉</sys:String>
+    <sys:String x:Key="QrCode">QR 圖碼</sys:String>
 
     <sys:String x:Key="Previous">上一個</sys:String>
     <sys:String x:Key="Next">下一個</sys:String>

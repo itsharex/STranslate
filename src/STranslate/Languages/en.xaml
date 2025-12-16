@@ -61,6 +61,9 @@
     <sys:String x:Key="General_ScreenshotTranslateInImageDescription">Whether to enable in-image translation during screenshot translation.</sys:String>
     <sys:String x:Key="General_ScreenshotTranslateInImageButtonVisible">Show the In-Image Translation button on the main interface.</sys:String>
     <sys:String x:Key="General_HideNotifyIcon">Hide NotifyIcon</sys:String>
+    <sys:String x:Key="General_ShowScreenshotItemInNotifyIconMenu">Show Screenshot Translation in Tray Menu</sys:String>
+    <sys:String x:Key="General_ShowOcrItemInNotifyIconMenu">Show Text Recognition in Tray Menu</sys:String>
+    <sys:String x:Key="General_ShowQrCodeItemInNotifyIconMenu">Show QR Code in Tray Menu</sys:String>
     <sys:String x:Key="General_ColorTheme">Color Theme</sys:String>
     <sys:String x:Key="General_ColorThemeDescription">Choose the color theme to display.</sys:String>
     <sys:String x:Key="General_ColorThemeButtonVisible">Show Color Theme button on main interface</sys:String>
@@ -298,6 +301,7 @@
     <sys:String x:Key="IdentifiedLanguageLabel">Identified</sys:String>
     <sys:String x:Key="On">On</sys:String>
     <sys:String x:Key="Off">Off</sys:String>
+    <sys:String x:Key="QrCode">QrCode</sys:String>
 
     <sys:String x:Key="Previous">Previous</sys:String>
     <sys:String x:Key="Next">Next</sys:String>

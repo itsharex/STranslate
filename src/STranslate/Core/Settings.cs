@@ -128,6 +128,10 @@ public partial class Settings : ObservableObject
     /// </summary>
     [ObservableProperty] public partial bool ShowPromptButton { get; set; } = true;
 
+    [ObservableProperty] public partial bool ShowScreenshotItemInNotifyIconMenu { get; set; } = false;
+    [ObservableProperty] public partial bool ShowOcrItemInNotifyIconMenu { get; set; } = false;
+    [ObservableProperty] public partial bool ShowQrCodeItemInNotifyIconMenu { get; set; } = false;
+
     /// <summary>
     /// 取词时换行处理
     /// </summary>

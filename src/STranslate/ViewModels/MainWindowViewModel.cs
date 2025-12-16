@@ -732,6 +732,18 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
         await ((OcrWindowViewModel)window.DataContext).ExecuteCommand.ExecuteAsync(bitmap);
     }
 
+    [RelayCommand]
+    private async Task QrCodeAsync()
+    {
+        if (GetOcrSvcAndNotify() == null)
+            return;
+
+        using var bitmap = await _screenshot.GetScreenshotAsync();
+        if (bitmap == null) return;
+        var window = await SingletonWindowOpener.OpenAsync<OcrWindow>();
+        ((OcrWindowViewModel)window.DataContext).QrCodeCommand.Execute(bitmap);
+    }
+
     [RelayCommand(IncludeCancelCommand = true)]
     private async Task SilentOcrAsync(CancellationToken cancellationToken)
     {

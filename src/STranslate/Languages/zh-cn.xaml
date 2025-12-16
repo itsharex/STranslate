@@ -61,6 +61,9 @@
     <sys:String x:Key="General_ScreenshotTranslateInImageDescription">截图翻译时是否启用图片内翻译.</sys:String>
     <sys:String x:Key="General_ScreenshotTranslateInImageButtonVisible">在主界面上显示启用图片内翻译按钮</sys:String>
     <sys:String x:Key="General_HideNotifyIcon">隐藏托盘图标</sys:String>
+    <sys:String x:Key="General_ShowScreenshotItemInNotifyIconMenu">托盘显示截图翻译选项</sys:String>
+    <sys:String x:Key="General_ShowOcrItemInNotifyIconMenu">托盘显示文本识别选项</sys:String>
+    <sys:String x:Key="General_ShowQrCodeItemInNotifyIconMenu">托盘显示二维码选项</sys:String>
     <sys:String x:Key="General_ColorTheme">颜色主题</sys:String>
     <sys:String x:Key="General_ColorThemeDescription">选择要显示的颜色主题。</sys:String>
     <sys:String x:Key="General_ColorThemeButtonVisible">主界面显示颜色主题按钮</sys:String>
@@ -298,6 +301,7 @@
     <sys:String x:Key="IdentifiedLanguageLabel">识别为</sys:String>
     <sys:String x:Key="On">开启</sys:String>
     <sys:String x:Key="Off">关闭</sys:String>
+    <sys:String x:Key="QrCode">二维码</sys:String>
 
     <sys:String x:Key="Previous">上一个</sys:String>
     <sys:String x:Key="Next">下一个</sys:String>

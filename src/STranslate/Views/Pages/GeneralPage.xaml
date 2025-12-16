@@ -350,15 +350,45 @@
                     </ui:SettingsCard>
                 </control:CardGroup>
 
-                <ui:SettingsCard Header="{DynamicResource General_HideNotifyIcon}">
-                    <ui:SettingsCard.HeaderIcon>
+                <ui:SettingsExpander Header="{DynamicResource General_HideNotifyIcon}">
+                    <ui:SettingsExpander.HeaderIcon>
                         <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.AlertOff_20_Regular}" />
-                    </ui:SettingsCard.HeaderIcon>
+                    </ui:SettingsExpander.HeaderIcon>
                     <ui:ToggleSwitch
                         IsOn="{Binding Settings.HideNotifyIcon}"
                         OffContent="{DynamicResource Disable}"
                         OnContent="{DynamicResource Enable}" />
-                </ui:SettingsCard>
+
+                    <ui:SettingsExpander.Items>
+                        <ui:SettingsCard Header="{DynamicResource General_ShowScreenshotItemInNotifyIconMenu}" IsEnabled="{Binding Settings.HideNotifyIcon, Converter={cnvt:BoolInverseConverter}}">
+                            <ui:SettingsCard.HeaderIcon>
+                                <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.ScreenCut_20_Regular}" />
+                            </ui:SettingsCard.HeaderIcon>
+                            <ui:ToggleSwitch
+                                IsOn="{Binding Settings.ShowScreenshotItemInNotifyIconMenu}"
+                                OffContent="{DynamicResource Hide}"
+                                OnContent="{DynamicResource Show}" />
+                        </ui:SettingsCard>
+                        <ui:SettingsCard Header="{DynamicResource General_ShowOcrItemInNotifyIconMenu}" IsEnabled="{Binding Settings.HideNotifyIcon, Converter={cnvt:BoolInverseConverter}}">
+                            <ui:SettingsCard.HeaderIcon>
+                                <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.ScanType_20_Regular}" />
+                            </ui:SettingsCard.HeaderIcon>
+                            <ui:ToggleSwitch
+                                IsOn="{Binding Settings.ShowOcrItemInNotifyIconMenu}"
+                                OffContent="{DynamicResource Hide}"
+                                OnContent="{DynamicResource Show}" />
+                        </ui:SettingsCard>
+                        <ui:SettingsCard Header="{DynamicResource General_ShowQrCodeItemInNotifyIconMenu}" IsEnabled="{Binding Settings.HideNotifyIcon, Converter={cnvt:BoolInverseConverter}}">
+                            <ui:SettingsCard.HeaderIcon>
+                                <ui:FontIcon Icon="{x:Static ui:FluentSystemIcons.QrCode_20_Regular}" />
+                            </ui:SettingsCard.HeaderIcon>
+                            <ui:ToggleSwitch
+                                IsOn="{Binding Settings.ShowQrCodeItemInNotifyIconMenu}"
+                                OffContent="{DynamicResource Hide}"
+                                OnContent="{DynamicResource Show}" />
+                        </ui:SettingsCard>
+                    </ui:SettingsExpander.Items>
+                </ui:SettingsExpander>
 
                 <ui:SettingsExpander Description="{DynamicResource General_ColorThemeDescription}" Header="{DynamicResource General_ColorTheme}">
                     <ui:SettingsExpander.HeaderIcon>
