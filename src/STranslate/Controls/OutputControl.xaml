@@ -140,10 +140,10 @@
                             Visibility="{Binding Plugin.DictionaryResult.ResultType, Converter={cnvt:DictionaryResultTypeVisibilityConverter}, ConverterParameter=Error}" />
 
                         <Button
-                            Padding="5,3"
+                            Padding="5,4"
                             FlowDirection="LeftToRight"
                             Style="{StaticResource QuickSettingsButtonStyle}">
-                            <ui:FontIcon FontSize="{DynamicResource STControlFontSize18}" Icon="{x:Static ui:FluentSystemIcons.SettingsCogMultiple_20_Regular}" />
+                            <ui:FontIcon FontSize="{DynamicResource STControlFontSize15}" Icon="{x:Static ui:FluentSystemIcons.Settings_20_Regular}" />
                             <Button.Resources>
                                 <s:BindingProxy x:Key="SvcProxy" Data="{Binding RelativeSource={RelativeSource AncestorType=Expander}, Path=DataContext}" />
                                 <s:BindingProxy x:Key="MainVmProxy" Data="{Binding RelativeSource={RelativeSource AncestorType=control:OutputControl}, Path=DataContext}" />
@@ -499,10 +499,10 @@
                             Visibility="{Binding Plugin.TransResult.IsSuccess, Converter={cnvt:BoolToVisibilityInverseConverter}}" />
 
                         <Button
-                            Padding="5,3"
+                            Padding="5,4"
                             FlowDirection="LeftToRight"
                             Style="{StaticResource QuickSettingsButtonStyle}">
-                            <ui:FontIcon FontSize="{DynamicResource STControlFontSize18}" Icon="{x:Static ui:FluentSystemIcons.SettingsCogMultiple_20_Regular}" />
+                            <ui:FontIcon FontSize="{DynamicResource STControlFontSize15}" Icon="{x:Static ui:FluentSystemIcons.Settings_20_Regular}" />
                             <Button.Resources>
                                 <s:BindingProxy x:Key="SvcProxy" Data="{Binding RelativeSource={RelativeSource AncestorType=Expander}, Path=DataContext}" />
                                 <s:BindingProxy x:Key="MainVmProxy" Data="{Binding RelativeSource={RelativeSource AncestorType=control:OutputControl}, Path=DataContext}" />
