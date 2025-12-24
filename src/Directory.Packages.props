@@ -29,10 +29,6 @@
     <PackageVersion Include="ObservableCollections" Version="3.3.4" />
     <PackageVersion Include="PracticalToolkit.WPF" Version="1.0.4" />
     <PackageVersion Include="ScreenGrab" Version="1.0.11" />
-    <PackageVersion Include="Sdcb.OpenCvSharp4.mini.runtime.win-x64" Version="4.11.0.35" />
-    <PackageVersion Include="Sdcb.OpenVINO" Version="0.7.0" />
-    <PackageVersion Include="Sdcb.OpenVINO.PaddleOCR.Models.Online" Version="0.7.0" />
-    <PackageVersion Include="Sdcb.OpenVINO.runtime.win-x64" Version="2025.2.0.1" />
     <PackageVersion Include="SemanticVersioning" Version="3.0.0" />
     <PackageVersion Include="Serilog.Extensions.Logging" Version="10.0.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="6.0.0" />
